@@ -16,65 +16,102 @@ public class ProductFeatureService {
     public ActiveProductFeature activeFeature() {
         Properties state = loadState();
         return new ActiveProductFeature(
-                value(state, "feature.id", "opportunity-brief-studio"),
-                value(state, "feature.name", "Opportunity Brief Studio"),
+                value(state, "feature.id", "agent-recovery-console"),
+                value(state, "feature.name", "Agent Recovery Console"),
                 value(state, "feature.stage", "prototype"),
                 integer(state, "feature.iteration", 1),
                 integer(state, "feature.stabilityScore", 35),
-                value(state, "feature.problem", "Turn broad industry problems into a useful product brief."),
-                value(state, "feature.audience", "Builders, founders, product teams, and operators"),
-                "Turns an industry, audience, problem, and constraint into a practical product opportunity brief.",
-                "Fill in the problem input, generate a brief, then use the validation plan with one real target user.",
-                value(state, "feature.lastImprovement", "Initial useful brief generator"),
-                value(state, "feature.nextIterationFocus", "Improve evidence gathering and prioritization"),
+                value(state, "feature.problem", "AI agents fail mid-run without clear diagnosis, repair ownership, or safe resume criteria."),
+                value(state, "feature.audience", "AI agent operators, platform admins, and developers maintaining autonomous workflows"),
+                "Turns a failed AI-agent run into a repair plan with evidence, admin actions, validation checks, and safe resume criteria.",
+                "Paste the agent goal, failure signal, workspace state, and constraints. Use the plan to fix the issue, validate locally, then resume the agent.",
+                value(state, "feature.lastImprovement", "Reset to one AI-agent recovery feature."),
+                value(state, "feature.nextIterationFocus", "Improve diagnosis quality, admin repair steps, and safe resume criteria."),
                 List.of(
-                        "One active feature at a time",
-                        "Useful output before clever automation",
-                        "Local tests before every commit",
-                        "Iterate until the product is stable"
+                        "One feature only",
+                        "Failure visibility before autonomy",
+                        "Admin repair before retry",
+                        "Local validation before resume"
                 )
         );
     }
 
-    public OpportunityBrief createBrief(OpportunityBriefRequest request) {
-        String industry = clean(request == null ? "" : request.industry(), "the selected industry");
-        String audience = clean(request == null ? "" : request.audience(), "teams who feel this pain");
-        String problem = clean(request == null ? "" : request.problem(), "a costly workflow that still relies on manual judgment");
-        String constraints = clean(request == null ? "" : request.constraints(), "limited time, limited budget, and a need to prove value quickly");
+    public RecoveryPlan createRecoveryPlan(RecoveryPlanRequest request) {
+        String agentGoal = clean(request == null ? "" : request.agentGoal(), "complete the current autonomous coding task");
+        String failureSignal = clean(request == null ? "" : request.failureSignal(), "the agent stopped with an unclear error");
+        String workspaceState = clean(request == null ? "" : request.workspaceState(), "workspace state is unknown");
+        String constraints = clean(request == null ? "" : request.constraints(), "avoid destructive commands and preserve user changes");
 
-        String title = titleFor(industry, problem);
-        return new OpportunityBrief(
-                title,
-                "A focused product opportunity for " + audience + " in " + industry + ".",
-                audience,
-                "When " + audience + " face " + problem + ", they need a practical way to decide what to do next without adding more process.",
-                "Create a lightweight workspace that captures the problem, proposes a first workflow, and turns the result into a testable next action.",
-                "The opportunity is useful now because many teams need faster prioritization while operating under " + constraints + ".",
+        return new RecoveryPlan(
+                titleFor(failureSignal),
+                "Recovery plan for an AI agent trying to " + agentGoal + ".",
+                likelyCause(failureSignal, workspaceState),
+                "The agent should pause instead of retrying blindly because the workspace may need human repair under: " + constraints + ".",
                 List.of(
-                        "Capture the problem, affected audience, and operating constraints",
-                        "Generate a plain-language opportunity brief",
-                        "Recommend a small validation experiment",
-                        "Track the current iteration and stability of the product feature"
+                        "Exact error message or failed command output",
+                        "Current git status and any uncommitted files",
+                        "Last successful local test command",
+                        "Relevant service logs, API response, or authentication state"
                 ),
                 List.of(
-                        "Interview five target users and compare their current workaround",
-                        "Run one manual concierge version of the brief workflow",
-                        "Measure whether users can decide a next action in under ten minutes",
-                        "Keep the feature local until the workflow proves repeatable"
+                        "Classify whether the failure is configuration, credentials, test regression, merge conflict, or unavailable service",
+                        "Fix only the files or settings related to the failure",
+                        "Re-run the narrow failing command first",
+                        "Run the full local verification command before resuming the agent"
                 ),
                 List.of(
-                        "Time from problem entry to useful brief",
-                        "Percent of briefs that lead to a concrete next action",
-                        "Number of validation conversations completed",
-                        "Repeat usage by the same team"
+                        "No unexpected git changes outside the intended workspace",
+                        "The previous failing command now exits successfully",
+                        "The application starts or the affected API responds locally",
+                        "The resume request includes the fix summary and remaining risk"
                 ),
+                riskFlags(failureSignal, constraints),
                 List.of(
-                        "The problem may be too broad without a narrower audience",
-                        "Generated recommendations may need stronger evidence",
-                        "Users may need collaboration or export before it becomes part of real work"
+                        "Capture the failing phase in the agent live feed",
+                        "Store the repair checklist with the blocked run",
+                        "Require a human resume action after credentials, tests, or git failures",
+                        "Keep future retries scoped to the original feature"
                 ),
-                "Use this brief with one real user, record what was unclear, then let Innovator improve this same feature."
+                "Resume only after the admin confirms the fix, local validation result, and whether any files were intentionally left changed.",
+                "Fix the highest-confidence cause, run local validation, then resume the agent from the Innovator UI."
         );
+    }
+
+    private List<String> riskFlags(String failureSignal, String constraints) {
+        String normalized = (failureSignal + " " + constraints).toLowerCase();
+        if (normalized.contains("auth") || normalized.contains("credential") || normalized.contains("oci")) {
+            return List.of(
+                    "Credentials or session auth may be expired",
+                    "Do not retry until the admin refreshes the session",
+                    "Confirm the configured compartment, profile, and region before resume"
+            );
+        }
+        if (normalized.contains("test") || normalized.contains("compile")) {
+            return List.of(
+                    "A code or dependency regression may be present",
+                    "Do not commit until the full test suite passes",
+                    "Inspect generated changes before retrying the loop"
+            );
+        }
+        return List.of(
+                "The failure may hide an unsafe workspace state",
+                "Repeated retries can create noisy commits",
+                "Resume only after a concrete validation signal is available"
+        );
+    }
+
+    private String likelyCause(String failureSignal, String workspaceState) {
+        String normalized = (failureSignal + " " + workspaceState).toLowerCase();
+        if (normalized.contains("auth") || normalized.contains("credential") || normalized.contains("oci")) {
+            return "The agent likely needs an OCI/session-auth or configuration repair before it can reason again.";
+        }
+        if (normalized.contains("test") || normalized.contains("compile")) {
+            return "The agent likely produced or encountered a local code/test regression that must be fixed before resume.";
+        }
+        if (normalized.contains("git") || normalized.contains("push") || normalized.contains("commit")) {
+            return "The agent likely reached a source-control boundary that needs admin attention.";
+        }
+        return "The run needs structured triage because the failing signal does not yet identify one safe repair path.";
     }
 
     private Properties loadState() {
@@ -101,9 +138,9 @@ public class ProductFeatureService {
         }
     }
 
-    private String titleFor(String industry, String problem) {
-        String compactProblem = problem.length() > 44 ? problem.substring(0, 44).strip() + "..." : problem;
-        return "Opportunity Brief: " + compactProblem + " in " + industry;
+    private String titleFor(String failureSignal) {
+        String compactSignal = failureSignal.length() > 52 ? failureSignal.substring(0, 52).strip() + "..." : failureSignal;
+        return "Agent Recovery Plan: " + compactSignal;
     }
 
     private String clean(String value, String fallback) {

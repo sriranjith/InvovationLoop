@@ -1,9 +1,9 @@
 package com.invovationloop.api;
 
 import com.invovationloop.product.ActiveProductFeature;
-import com.invovationloop.product.OpportunityBrief;
-import com.invovationloop.product.OpportunityBriefRequest;
 import com.invovationloop.product.ProductFeatureService;
+import com.invovationloop.product.RecoveryPlan;
+import com.invovationloop.product.RecoveryPlanRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +25,8 @@ public class ProductController {
         return productFeatureService.activeFeature();
     }
 
-    @PostMapping("/brief")
-    public ResponseEntity<OpportunityBrief> brief(@RequestBody OpportunityBriefRequest request) {
-        return ResponseEntity.ok(productFeatureService.createBrief(request));
+    @PostMapping("/recovery-plan")
+    public ResponseEntity<RecoveryPlan> recoveryPlan(@RequestBody RecoveryPlanRequest request) {
+        return ResponseEntity.ok(productFeatureService.createRecoveryPlan(request));
     }
 }

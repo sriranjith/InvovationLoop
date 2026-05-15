@@ -7,21 +7,21 @@ const elements = {
     featureUsage: document.querySelector("#featureUsage"),
     lastImprovement: document.querySelector("#lastImprovement"),
     nextFocus: document.querySelector("#nextFocus"),
-    form: document.querySelector("#briefForm"),
-    industry: document.querySelector("#industry"),
-    audience: document.querySelector("#audience"),
-    problem: document.querySelector("#problem"),
+    form: document.querySelector("#recoveryForm"),
+    agentGoal: document.querySelector("#agentGoal"),
+    failureSignal: document.querySelector("#failureSignal"),
+    workspaceState: document.querySelector("#workspaceState"),
     constraints: document.querySelector("#constraints"),
-    briefStatus: document.querySelector("#briefStatus"),
-    briefOutput: document.querySelector("#briefOutput")
+    planStatus: document.querySelector("#planStatus"),
+    planOutput: document.querySelector("#planOutput")
 };
 
 elements.form.addEventListener("submit", event => {
     event.preventDefault();
-    createBrief();
+    createRecoveryPlan();
 });
 
-loadActiveFeature().then(createBrief);
+loadActiveFeature().then(createRecoveryPlan);
 
 async function loadActiveFeature() {
     const response = await fetch("/api/product/active");
@@ -36,42 +36,43 @@ async function loadActiveFeature() {
     elements.nextFocus.textContent = feature.nextIterationFocus;
 }
 
-async function createBrief() {
-    elements.briefStatus.textContent = "working";
+async function createRecoveryPlan() {
+    elements.planStatus.textContent = "working";
     const payload = {
-        industry: elements.industry.value,
-        audience: elements.audience.value,
-        problem: elements.problem.value,
+        agentGoal: elements.agentGoal.value,
+        failureSignal: elements.failureSignal.value,
+        workspaceState: elements.workspaceState.value,
         constraints: elements.constraints.value
     };
-    const response = await fetch("/api/product/brief", {
+    const response = await fetch("/api/product/recovery-plan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
     });
-    const brief = await response.json();
-    renderBrief(brief);
-    elements.briefStatus.textContent = "generated";
+    const plan = await response.json();
+    renderPlan(plan);
+    elements.planStatus.textContent = "generated";
 }
 
-function renderBrief(brief) {
-    elements.briefOutput.replaceChildren(
-        titleSection(brief.title),
-        textSection("Summary", brief.summary),
-        textSection("Job To Be Done", brief.jobToBeDone),
-        textSection("Proposed Solution", brief.proposedSolution),
-        textSection("Why Now", brief.whyNow),
-        listSection("MVP Scope", brief.mvpScope),
-        listSection("Validation Plan", brief.validationPlan),
-        listSection("Success Metrics", brief.successMetrics),
-        listSection("Risks", brief.risks),
-        textSection("Next Step", brief.nextStep)
+function renderPlan(plan) {
+    elements.planOutput.replaceChildren(
+        titleSection(plan.title),
+        textSection("Summary", plan.summary),
+        textSection("Likely Cause", plan.likelyCause),
+        textSection("Operator Impact", plan.operatorImpact),
+        listSection("Evidence To Collect", plan.evidenceToCollect),
+        listSection("Admin Actions", plan.adminActions),
+        listSection("Validation Checks", plan.validationChecks),
+        listSection("Risk Flags", plan.riskFlags),
+        listSection("Prevention Ideas", plan.preventionIdeas),
+        textSection("Resume Prompt", plan.resumePrompt),
+        textSection("Next Step", plan.nextStep)
     );
 }
 
 function titleSection(title) {
     const section = document.createElement("section");
-    section.className = "brief-title";
+    section.className = "plan-title";
     const heading = document.createElement("h3");
     heading.textContent = title;
     section.append(heading);
@@ -80,7 +81,7 @@ function titleSection(title) {
 
 function textSection(title, text) {
     const section = document.createElement("section");
-    section.className = "brief-section";
+    section.className = "plan-section";
 
     const heading = document.createElement("h3");
     heading.textContent = title;
@@ -94,7 +95,7 @@ function textSection(title, text) {
 
 function listSection(title, items) {
     const section = document.createElement("section");
-    section.className = "brief-section";
+    section.className = "plan-section";
 
     const heading = document.createElement("h3");
     heading.textContent = title;

@@ -193,44 +193,44 @@ textarea {
 }
 
 .iteration-note p,
-.brief-section p {
+.plan-section p {
     margin: 0;
     color: var(--muted);
     line-height: 1.5;
 }
 
-.brief-output {
+.plan-output {
     display: grid;
     gap: 12px;
 }
 
-.brief-title {
+.plan-title {
     border-bottom: 1px solid #edf0f5;
     padding-bottom: 12px;
 }
 
-.brief-title h3 {
+.plan-title h3 {
     color: var(--ink);
     font-size: 1.15rem;
     line-height: 1.25;
 }
 
-.brief-section {
+.plan-section {
     border-top: 1px solid #edf0f5;
     padding-top: 12px;
 }
 
-.brief-section:first-child {
+.plan-section:first-child {
     border-top: 0;
     padding-top: 0;
 }
 
-.brief-section h3 {
+.plan-section h3 {
     margin-bottom: 6px;
     color: var(--blue);
 }
 
-.brief-section ul {
+.plan-section ul {
     margin: 0;
     padding-left: 20px;
     color: var(--muted);
