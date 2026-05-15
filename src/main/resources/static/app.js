@@ -1,147 +1,111 @@
-const inputs = {
-    novelty: document.querySelector("#novelty"),
-    reliability: document.querySelector("#reliability"),
-    simplicity: document.querySelector("#simplicity")
+const elements = {
+    featureName: document.querySelector("#featureName"),
+    featureStage: document.querySelector("#featureStage"),
+    featureIteration: document.querySelector("#featureIteration"),
+    featureStability: document.querySelector("#featureStability"),
+    featurePurpose: document.querySelector("#featurePurpose"),
+    featureUsage: document.querySelector("#featureUsage"),
+    lastImprovement: document.querySelector("#lastImprovement"),
+    nextFocus: document.querySelector("#nextFocus"),
+    form: document.querySelector("#briefForm"),
+    industry: document.querySelector("#industry"),
+    audience: document.querySelector("#audience"),
+    problem: document.querySelector("#problem"),
+    constraints: document.querySelector("#constraints"),
+    briefStatus: document.querySelector("#briefStatus"),
+    briefOutput: document.querySelector("#briefOutput")
 };
 
-const labels = {
-    novelty: document.querySelector("#noveltyValue"),
-    reliability: document.querySelector("#reliabilityValue"),
-    simplicity: document.querySelector("#simplicityValue")
-};
-
-const featureGrid = document.querySelector("#featureGrid");
-const projectGrid = document.querySelector("#projectGrid");
-const activeFeature = document.querySelector("#activeFeature");
-const scoreValue = document.querySelector("#scoreValue");
-const refreshButton = document.querySelector("#refreshButton");
-
-const usableProjects = [
-    {
-        title: "Innovator Agent",
-        url: "http://localhost:8080",
-        role: "autonomous maintainer",
-        summary: "Start or stop the agent, watch its thinking, and let it commit tested changes into InvovationLoop."
-    },
-    {
-        title: "InvovationLoop Playground",
-        url: "http://localhost:8081",
-        role: "feature playground",
-        summary: "Play with generated features, tune scores, and inspect the usable innovations the agent has added."
-    }
-];
-
-Object.entries(inputs).forEach(([key, input]) => {
-    input.addEventListener("input", () => {
-        labels[key].textContent = input.value;
-    });
+elements.form.addEventListener("submit", event => {
+    event.preventDefault();
+    createBrief();
 });
 
-refreshButton.addEventListener("click", loadFeatures);
-renderProjects();
-loadFeatures();
+loadActiveFeature().then(createBrief);
 
-function renderProjects() {
-    projectGrid.replaceChildren(...usableProjects.map(project => {
-        const card = document.createElement("article");
-        card.className = "project-card";
-
-        const role = document.createElement("span");
-        role.className = "project-role";
-        role.textContent = project.role;
-
-        const title = document.createElement("h3");
-        title.textContent = project.title;
-
-        const summary = document.createElement("p");
-        summary.textContent = project.summary;
-
-        const link = document.createElement("a");
-        link.href = project.url;
-        link.textContent = "Open";
-        link.className = "open-link";
-
-        card.append(role, title, summary, link);
-        return card;
-    }));
+async function loadActiveFeature() {
+    const response = await fetch("/api/product/active");
+    const feature = await response.json();
+    elements.featureName.textContent = feature.name;
+    elements.featureStage.textContent = feature.stage;
+    elements.featureIteration.textContent = feature.iteration;
+    elements.featureStability.textContent = `${feature.stabilityScore}/100`;
+    elements.featurePurpose.textContent = feature.whatItDoes;
+    elements.featureUsage.textContent = feature.howToUse;
+    elements.lastImprovement.textContent = feature.lastImprovement;
+    elements.nextFocus.textContent = feature.nextIterationFocus;
 }
 
-async function loadFeatures() {
-    const response = await fetch("/api/features");
-    const features = await response.json();
-    renderFeatures(features);
-}
-
-function renderFeatures(features) {
-    if (!features.length) {
-        const empty = document.createElement("p");
-        empty.textContent = "No features are available yet.";
-        featureGrid.replaceChildren(empty);
-        return;
-    }
-
-    featureGrid.replaceChildren(...features.map(feature => {
-        const card = document.createElement("article");
-        card.className = "feature-card";
-
-        const title = document.createElement("h3");
-        title.textContent = feature.title;
-
-        const category = document.createElement("span");
-        category.className = "category";
-        category.textContent = feature.category;
-
-        const summary = document.createElement("p");
-        summary.className = "feature-summary";
-        summary.textContent = feature.summary;
-
-        const purpose = detailBlock("What it does", feature.purpose || feature.summary);
-        const usage = detailBlock("How to use it", feature.usage || "Adjust the sliders, then press Play.");
-
-        const play = document.createElement("button");
-        play.className = "play";
-        play.type = "button";
-        play.textContent = "Play";
-        play.addEventListener("click", () => playFeature(feature, card));
-
-        const result = document.createElement("div");
-        result.className = "result";
-        result.setAttribute("aria-live", "polite");
-
-        card.append(category, title, summary, purpose, usage, play, result);
-        return card;
-    }));
-}
-
-function detailBlock(labelText, bodyText) {
-    const block = document.createElement("div");
-    block.className = "feature-detail";
-
-    const label = document.createElement("span");
-    label.textContent = labelText;
-
-    const body = document.createElement("p");
-    body.textContent = bodyText;
-
-    block.append(label, body);
-    return block;
-}
-
-async function playFeature(feature, card) {
+async function createBrief() {
+    elements.briefStatus.textContent = "working";
     const payload = {
-        novelty: Number(inputs.novelty.value),
-        reliability: Number(inputs.reliability.value),
-        simplicity: Number(inputs.simplicity.value)
+        industry: elements.industry.value,
+        audience: elements.audience.value,
+        problem: elements.problem.value,
+        constraints: elements.constraints.value
     };
-    const response = await fetch(`/api/features/${feature.id}/play`, {
+    const response = await fetch("/api/product/brief", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
     });
-    const result = await response.json();
-    activeFeature.textContent = result.title;
-    scoreValue.textContent = result.score;
-    const resultElement = card.querySelector(".result");
-    resultElement.className = `result ${result.recommendation}`;
-    resultElement.textContent = `${result.recommendation} at ${result.score}`;
+    const brief = await response.json();
+    renderBrief(brief);
+    elements.briefStatus.textContent = "generated";
+}
+
+function renderBrief(brief) {
+    elements.briefOutput.replaceChildren(
+        titleSection(brief.title),
+        textSection("Summary", brief.summary),
+        textSection("Job To Be Done", brief.jobToBeDone),
+        textSection("Proposed Solution", brief.proposedSolution),
+        textSection("Why Now", brief.whyNow),
+        listSection("MVP Scope", brief.mvpScope),
+        listSection("Validation Plan", brief.validationPlan),
+        listSection("Success Metrics", brief.successMetrics),
+        listSection("Risks", brief.risks),
+        textSection("Next Step", brief.nextStep)
+    );
+}
+
+function titleSection(title) {
+    const section = document.createElement("section");
+    section.className = "brief-title";
+    const heading = document.createElement("h3");
+    heading.textContent = title;
+    section.append(heading);
+    return section;
+}
+
+function textSection(title, text) {
+    const section = document.createElement("section");
+    section.className = "brief-section";
+
+    const heading = document.createElement("h3");
+    heading.textContent = title;
+
+    const body = document.createElement("p");
+    body.textContent = text;
+
+    section.append(heading, body);
+    return section;
+}
+
+function listSection(title, items) {
+    const section = document.createElement("section");
+    section.className = "brief-section";
+
+    const heading = document.createElement("h3");
+    heading.textContent = title;
+
+    const list = document.createElement("ul");
+    (items || []).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        list.append(li);
+    });
+
+    section.append(heading, list);
+    return section;
 }

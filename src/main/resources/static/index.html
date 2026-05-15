@@ -8,54 +8,83 @@
 </head>
 <body>
 <main class="shell">
-    <header class="masthead">
+    <header class="topbar">
         <div>
             <p class="eyebrow">Managed by Innovator</p>
-            <h1>InvovationLoop</h1>
+            <h1>Opportunity Brief Studio</h1>
         </div>
-        <div class="score-panel">
-            <span id="activeFeature">No feature selected</span>
-            <strong id="scoreValue">--</strong>
-        </div>
+        <a class="agent-link" href="http://localhost:8080">Innovator Agent</a>
     </header>
 
-    <section class="projects-section" aria-label="Usable projects">
-        <div class="section-title">
-            <h2>Usable Projects</h2>
+    <section class="status-band" aria-label="Active product feature">
+        <div>
+            <span class="label">Active Feature</span>
+            <strong id="featureName">Loading...</strong>
         </div>
-        <div id="projectGrid" class="project-grid"></div>
+        <div>
+            <span class="label">Stage</span>
+            <strong id="featureStage">--</strong>
+        </div>
+        <div>
+            <span class="label">Iteration</span>
+            <strong id="featureIteration">--</strong>
+        </div>
+        <div>
+            <span class="label">Stability</span>
+            <strong id="featureStability">--</strong>
+        </div>
     </section>
 
-    <section class="control-band" aria-label="Feature inputs">
-        <label>
-            Novelty
-            <input id="novelty" type="range" min="0" max="100" value="72">
-            <span id="noveltyValue">72</span>
-        </label>
-        <label>
-            Reliability
-            <input id="reliability" type="range" min="0" max="100" value="80">
-            <span id="reliabilityValue">80</span>
-        </label>
-        <label>
-            Simplicity
-            <input id="simplicity" type="range" min="0" max="100" value="76">
-            <span id="simplicityValue">76</span>
-        </label>
+    <section class="feature-explain" aria-label="Feature details">
+        <article>
+            <span class="label">What It Does</span>
+            <p id="featurePurpose">Loading...</p>
+        </article>
+        <article>
+            <span class="label">How To Use It</span>
+            <p id="featureUsage">Loading...</p>
+        </article>
+        <article>
+            <span class="label">Latest Iteration</span>
+            <p id="lastImprovement">Loading...</p>
+        </article>
     </section>
 
-    <section>
-        <div class="section-title">
-            <h2>Playable Features</h2>
-            <button id="refreshButton" type="button" title="Refresh features">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M20 12a8 8 0 1 1-2.34-5.66"></path>
-                    <path d="M20 4v6h-6"></path>
-                </svg>
-            </button>
-        </div>
-        <p class="threshold-note">Scores 80+ are commit-ready, 50-79 need more tests, and below 50 need redesign.</p>
-        <div id="featureGrid" class="feature-grid"></div>
+    <section class="workspace">
+        <form id="briefForm" class="input-panel">
+            <div class="section-title">
+                <h2>Problem Input</h2>
+                <button type="submit">Generate Brief</button>
+            </div>
+            <label>
+                Industry
+                <input id="industry" name="industry" value="healthcare operations">
+            </label>
+            <label>
+                Audience
+                <input id="audience" name="audience" value="clinic managers">
+            </label>
+            <label>
+                Problem
+                <textarea id="problem" name="problem">staff spend hours reconciling appointment no-shows</textarea>
+            </label>
+            <label>
+                Constraints
+                <textarea id="constraints" name="constraints">small teams, limited budget, no new cloud dependency yet</textarea>
+            </label>
+            <div class="iteration-note">
+                <span>Current Focus</span>
+                <p id="nextFocus">Loading...</p>
+            </div>
+        </form>
+
+        <section class="output-panel" aria-label="Generated opportunity brief">
+            <div class="section-title">
+                <h2>Opportunity Brief</h2>
+                <span id="briefStatus" class="muted">ready</span>
+            </div>
+            <article id="briefOutput" class="brief-output"></article>
+        </section>
     </section>
 </main>
 <script src="/app.js"></script>
