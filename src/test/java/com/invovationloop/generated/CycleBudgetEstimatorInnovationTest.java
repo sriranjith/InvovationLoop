@@ -32,6 +32,8 @@ class CycleBudgetEstimatorInnovationTest {
         assertThat(innovation.id()).isEqualTo("cycle-budget-estimator");
         assertThat(innovation.title()).isNotBlank();
         assertThat(innovation.summary()).isNotBlank();
+        assertThat(innovation.purpose()).isNotBlank();
+        assertThat(innovation.usage()).isNotBlank();
         assertThat(innovation.category()).isNotBlank();
     }
 }

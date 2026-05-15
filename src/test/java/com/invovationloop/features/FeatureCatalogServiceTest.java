@@ -12,6 +12,8 @@ class FeatureCatalogServiceTest {
         FeatureCatalogService service = new FeatureCatalogService(List.of(new CycleBudgetEstimatorInnovation()));
 
         assertThat(service.listFeatures()).extracting(FeatureView::id).containsExactly("cycle-budget-estimator");
+        assertThat(service.listFeatures().get(0).purpose()).contains("implementation time");
+        assertThat(service.listFeatures().get(0).usage()).contains("press Play");
         assertThat(service.play("cycle-budget-estimator", 90, 90, 90).recommendation()).isEqualTo("commit-ready");
     }
 }

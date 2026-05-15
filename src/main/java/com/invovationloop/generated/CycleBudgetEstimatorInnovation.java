@@ -25,6 +25,16 @@ public final class CycleBudgetEstimatorInnovation implements LoopFeature {
     }
 
     @Override
+    public String purpose() {
+        return "Estimate whether an idea has enough balanced signal to deserve implementation time.";
+    }
+
+    @Override
+    public String usage() {
+        return "Set the sliders to describe the idea, then press Play to see if it is ready for a commit-sized build.";
+    }
+
+    @Override
     public String category() {
         return "planning";
     }

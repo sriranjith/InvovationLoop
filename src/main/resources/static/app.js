@@ -92,7 +92,11 @@ function renderFeatures(features) {
         category.textContent = feature.category;
 
         const summary = document.createElement("p");
+        summary.className = "feature-summary";
         summary.textContent = feature.summary;
+
+        const purpose = detailBlock("What it does", feature.purpose || feature.summary);
+        const usage = detailBlock("How to use it", feature.usage || "Adjust the sliders, then press Play.");
 
         const play = document.createElement("button");
         play.className = "play";
@@ -104,9 +108,23 @@ function renderFeatures(features) {
         result.className = "result";
         result.setAttribute("aria-live", "polite");
 
-        card.append(category, title, summary, play, result);
+        card.append(category, title, summary, purpose, usage, play, result);
         return card;
     }));
+}
+
+function detailBlock(labelText, bodyText) {
+    const block = document.createElement("div");
+    block.className = "feature-detail";
+
+    const label = document.createElement("span");
+    label.textContent = labelText;
+
+    const body = document.createElement("p");
+    body.textContent = bodyText;
+
+    block.append(label, body);
+    return block;
 }
 
 async function playFeature(feature, card) {

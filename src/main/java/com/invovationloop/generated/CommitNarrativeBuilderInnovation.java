@@ -25,6 +25,16 @@ public final class CommitNarrativeBuilderInnovation implements LoopFeature {
     }
 
     @Override
+    public String purpose() {
+        return "Judge whether a generated change can be explained as a coherent, reviewable commit.";
+    }
+
+    @Override
+    public String usage() {
+        return "Use the sliders to model clarity and confidence, then press Play before accepting a commit story.";
+    }
+
+    @Override
     public String category() {
         return "agent-generated";
     }

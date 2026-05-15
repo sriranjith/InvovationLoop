@@ -219,6 +219,27 @@ button svg {
     line-height: 1.45;
 }
 
+.feature-summary {
+    min-height: 42px;
+}
+
+.feature-detail {
+    display: grid;
+    gap: 4px;
+    border-top: 1px solid #edf0f5;
+    padding-top: 10px;
+}
+
+.feature-detail span {
+    color: var(--ink);
+    font-size: 0.78rem;
+    font-weight: 900;
+}
+
+.feature-detail p {
+    color: var(--muted);
+}
+
 .feature-card .category {
     width: fit-content;
     border: 1px solid rgba(12, 113, 128, 0.22);

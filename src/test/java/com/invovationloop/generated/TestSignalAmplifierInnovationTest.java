@@ -32,6 +32,8 @@ class TestSignalAmplifierInnovationTest {
         assertThat(innovation.id()).isNotBlank();
         assertThat(innovation.title()).isNotBlank();
         assertThat(innovation.summary()).isNotBlank();
+        assertThat(innovation.purpose()).isNotBlank();
+        assertThat(innovation.usage()).isNotBlank();
         assertThat(innovation.category()).isNotBlank();
     }
 }

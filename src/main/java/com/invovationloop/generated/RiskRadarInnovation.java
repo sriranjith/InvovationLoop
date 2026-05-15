@@ -25,6 +25,16 @@ public final class RiskRadarInnovation implements LoopFeature {
     }
 
     @Override
+    public String purpose() {
+        return "Compare delivery risk across generated ideas before the agent commits to a direction.";
+    }
+
+    @Override
+    public String usage() {
+        return "Tune the sliders for the current idea and press Play to classify the delivery risk band.";
+    }
+
+    @Override
     public String category() {
         return "agent-generated";
     }

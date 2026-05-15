@@ -25,6 +25,16 @@ public final class TestSignalAmplifierInnovation implements LoopFeature {
     }
 
     @Override
+    public String purpose() {
+        return "Spot features whose implementation may need more local verification before committing.";
+    }
+
+    @Override
+    public String usage() {
+        return "Lower or raise the sliders to model test confidence, then press Play to see the needed test posture.";
+    }
+
+    @Override
     public String category() {
         return "agent-generated";
     }
