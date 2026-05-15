@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>InvovationLoop</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="shell">
+    <header class="masthead">
+        <div>
+            <p class="eyebrow">Managed by Innovator</p>
+            <h1>InvovationLoop</h1>
+        </div>
+        <div class="score-panel">
+            <span id="activeFeature">No feature selected</span>
+            <strong id="scoreValue">--</strong>
+        </div>
+    </header>
+
+    <section class="control-band" aria-label="Feature inputs">
+        <label>
+            Novelty
+            <input id="novelty" type="range" min="0" max="100" value="72">
+            <span id="noveltyValue">72</span>
+        </label>
+        <label>
+            Reliability
+            <input id="reliability" type="range" min="0" max="100" value="80">
+            <span id="reliabilityValue">80</span>
+        </label>
+        <label>
+            Simplicity
+            <input id="simplicity" type="range" min="0" max="100" value="76">
+            <span id="simplicityValue">76</span>
+        </label>
+    </section>
+
+    <section>
+        <div class="section-title">
+            <h2>Features</h2>
+            <button id="refreshButton" type="button" title="Refresh features">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 12a8 8 0 1 1-2.34-5.66"></path>
+                    <path d="M20 4v6h-6"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="featureGrid" class="feature-grid"></div>
+    </section>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
