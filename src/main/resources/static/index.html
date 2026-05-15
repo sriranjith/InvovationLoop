@@ -19,6 +19,13 @@
         </div>
     </header>
 
+    <section class="projects-section" aria-label="Usable projects">
+        <div class="section-title">
+            <h2>Usable Projects</h2>
+        </div>
+        <div id="projectGrid" class="project-grid"></div>
+    </section>
+
     <section class="control-band" aria-label="Feature inputs">
         <label>
             Novelty
@@ -39,7 +46,7 @@
 
     <section>
         <div class="section-title">
-            <h2>Features</h2>
+            <h2>Playable Features</h2>
             <button id="refreshButton" type="button" title="Refresh features">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M20 12a8 8 0 1 1-2.34-5.66"></path>
@@ -47,6 +54,7 @@
                 </svg>
             </button>
         </div>
+        <p class="threshold-note">Scores 80+ are commit-ready, 50-79 need more tests, and below 50 need redesign.</p>
         <div id="featureGrid" class="feature-grid"></div>
     </section>
 </main>

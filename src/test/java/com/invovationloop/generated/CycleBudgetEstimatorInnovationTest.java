@@ -23,6 +23,11 @@ class CycleBudgetEstimatorInnovationTest {
     }
 
     @Test
+    void middleSignalsNeedMoreTests() {
+        assertThat(innovation.recommendation(52, 52, 52)).isEqualTo("needs-more-tests");
+    }
+
+    @Test
     void metadataIsPresent() {
         assertThat(innovation.id()).isEqualTo("cycle-budget-estimator");
         assertThat(innovation.title()).isNotBlank();

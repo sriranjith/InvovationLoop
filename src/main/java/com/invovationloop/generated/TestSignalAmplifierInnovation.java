@@ -44,7 +44,7 @@ public final class TestSignalAmplifierInnovation implements LoopFeature {
         if (score >= 80) {
             return "commit-ready";
         }
-        if (score >= 55) {
+        if (score >= 50) {
             return "needs-more-tests";
         }
         return "needs-redesign";

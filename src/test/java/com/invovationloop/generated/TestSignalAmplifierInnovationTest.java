@@ -23,6 +23,11 @@ class TestSignalAmplifierInnovationTest {
     }
 
     @Test
+    void middleSignalsNeedMoreTests() {
+        assertThat(innovation.recommendation(52, 52, 52)).isEqualTo("needs-more-tests");
+    }
+
+    @Test
     void metadataIsPresent() {
         assertThat(innovation.id()).isNotBlank();
         assertThat(innovation.title()).isNotBlank();

@@ -11,9 +11,25 @@ const labels = {
 };
 
 const featureGrid = document.querySelector("#featureGrid");
+const projectGrid = document.querySelector("#projectGrid");
 const activeFeature = document.querySelector("#activeFeature");
 const scoreValue = document.querySelector("#scoreValue");
 const refreshButton = document.querySelector("#refreshButton");
+
+const usableProjects = [
+    {
+        title: "Innovator Agent",
+        url: "http://localhost:8080",
+        role: "autonomous maintainer",
+        summary: "Start or stop the agent, watch its thinking, and let it commit tested changes into InvovationLoop."
+    },
+    {
+        title: "InvovationLoop Playground",
+        url: "http://localhost:8081",
+        role: "feature playground",
+        summary: "Play with generated features, tune scores, and inspect the usable innovations the agent has added."
+    }
+];
 
 Object.entries(inputs).forEach(([key, input]) => {
     input.addEventListener("input", () => {
@@ -22,7 +38,33 @@ Object.entries(inputs).forEach(([key, input]) => {
 });
 
 refreshButton.addEventListener("click", loadFeatures);
+renderProjects();
 loadFeatures();
+
+function renderProjects() {
+    projectGrid.replaceChildren(...usableProjects.map(project => {
+        const card = document.createElement("article");
+        card.className = "project-card";
+
+        const role = document.createElement("span");
+        role.className = "project-role";
+        role.textContent = project.role;
+
+        const title = document.createElement("h3");
+        title.textContent = project.title;
+
+        const summary = document.createElement("p");
+        summary.textContent = project.summary;
+
+        const link = document.createElement("a");
+        link.href = project.url;
+        link.textContent = "Open";
+        link.className = "open-link";
+
+        card.append(role, title, summary, link);
+        return card;
+    }));
+}
 
 async function loadFeatures() {
     const response = await fetch("/api/features");
@@ -81,5 +123,7 @@ async function playFeature(feature, card) {
     const result = await response.json();
     activeFeature.textContent = result.title;
     scoreValue.textContent = result.score;
-    card.querySelector(".result").textContent = `${result.recommendation} at ${result.score}`;
+    const resultElement = card.querySelector(".result");
+    resultElement.className = `result ${result.recommendation}`;
+    resultElement.textContent = `${result.recommendation} at ${result.score}`;
 }
