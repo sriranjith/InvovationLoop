@@ -1,0 +1,32 @@
+package com.invovationloop.generated;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
+
+class TestSignalAmplifierInnovationTest {
+    private final TestSignalAmplifierInnovation innovation = new TestSignalAmplifierInnovation();
+
+    @Test
+    void scoreIsAlwaysBounded() {
+        assertThat(innovation.readinessScore(-100, 50, 500)).isBetween(0, 100);
+    }
+
+    @Test
+    void highSignalsAreCommitReady() {
+        assertThat(innovation.recommendation(90, 90, 90)).isEqualTo("commit-ready");
+    }
+
+    @Test
+    void lowSignalsNeedRedesign() {
+        assertThat(innovation.recommendation(5, 10, 15)).isEqualTo("needs-redesign");
+    }
+
+    @Test
+    void metadataIsPresent() {
+        assertThat(innovation.id()).isNotBlank();
+        assertThat(innovation.title()).isNotBlank();
+        assertThat(innovation.summary()).isNotBlank();
+        assertThat(innovation.category()).isNotBlank();
+    }
+}
