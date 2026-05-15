@@ -11,7 +11,7 @@ public final class ExtensionReadinessIndex2Innovation implements LoopFeature {
 
     @Override
     public String id() {
-        return "extension-readiness-index";
+        return "extension-readiness-index-2";
     }
 
     @Override

@@ -11,7 +11,7 @@ public final class RiskRadar2Innovation implements LoopFeature {
 
     @Override
     public String id() {
-        return "risk-radar";
+        return "risk-radar-2";
     }
 
     @Override

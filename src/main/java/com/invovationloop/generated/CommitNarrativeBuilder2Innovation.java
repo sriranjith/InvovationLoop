@@ -11,7 +11,7 @@ public final class CommitNarrativeBuilder2Innovation implements LoopFeature {
 
     @Override
     public String id() {
-        return "commit-narrative-builder";
+        return "commit-narrative-builder-2";
     }
 
     @Override

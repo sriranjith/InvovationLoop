@@ -11,7 +11,7 @@ public final class TestSignalAmplifier2Innovation implements LoopFeature {
 
     @Override
     public String id() {
-        return "test-signal-amplifier";
+        return "test-signal-amplifier-2";
     }
 
     @Override

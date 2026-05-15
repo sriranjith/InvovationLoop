@@ -29,7 +29,7 @@ class ExtensionReadinessIndex2InnovationTest {
 
     @Test
     void metadataIsPresent() {
-        assertThat(innovation.id()).isNotBlank();
+        assertThat(innovation.id()).isEqualTo("extension-readiness-index-2");
         assertThat(innovation.title()).isNotBlank();
         assertThat(innovation.summary()).isNotBlank();
         assertThat(innovation.purpose()).isNotBlank();

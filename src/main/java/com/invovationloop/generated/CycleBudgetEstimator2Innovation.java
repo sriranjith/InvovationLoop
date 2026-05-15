@@ -11,7 +11,7 @@ public final class CycleBudgetEstimator2Innovation implements LoopFeature {
 
     @Override
     public String id() {
-        return "cycle-budget-estimator";
+        return "cycle-budget-estimator-2";
     }
 
     @Override
